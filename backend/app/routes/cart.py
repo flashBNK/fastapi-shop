@@ -25,7 +25,7 @@ class RemoveFromCartRequest(BaseModel):
     cart: Dict[int, int] = {}
 
 @router.post("/add", status_code=status.HTTP_200_OK)
-def add_to_cart(request: AddToCartRequest, db: Session = Depends(get_db())):
+def add_to_cart(request: AddToCartRequest, db: Session = Depends(get_db)):
     service = CartService(db) # инициализируем сервис для использования бизнес логики
     item = CartItemCreate(product_id=request.product_id, quantity=request.quantity) # переводим введённую инфу в объект схемы
     updated_cart = service.add_to_cart(request.cart, item) # вносим изменения в корзину
@@ -37,7 +37,7 @@ def get_cart(cart_data: Dict[int, int], db: Session = Depends(get_db)):
     return service.get_cart_details(cart_data)
 
 @router.put("/update", status_code=status.HTTP_200_OK)
-def update_cart_item(request: UpdateCartRequest, db: Session = Depends(get_db())):
+def update_cart_item(request: UpdateCartRequest, db: Session = Depends(get_db)):
     service = CartService(db) # инициализируем сервис для использования бизнес логики
     item = CartItemUpdate(product_id=request.product_id, quantity=request.quantity) # переводим введённую инфу в объект схемы
     updated_cart = service.update_cart_item(request.cart, item) # вносим изменения в корзину
